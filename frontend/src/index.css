@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pagina de Inicio */
+@layer components {
+	.contenedor-cards {
+		@apply container mx-auto md:grid md:grid-cols-2 lg:grid-cols-3 px-6 items-center my-12 md:my-0 xl:gap-20 2xl:gap-36;
+	}
+	.card {
+		@apply bg-white my-10 mx-14 md:my-5 md:mx-10 py-10 px-10 rounded-lg flex items-center flex-col hover:scale-110 shadow-xl;
+	}
+
+	.circulo-icono {
+		@apply w-24 h-24 rounded-full border-4 border-gray-600 flex items-center justify-center;
+	}
+
+	.icono {
+		@apply text-6xl text-gray-600 text-center;
+	}
+
+	.card-titulo {
+		@apply mt-5 text-xl font-bold text-gray-700;
+	}
+
+	.card-btn {
+		@apply bg-teal-600 
+        w-full  py-3 px-5 rounded-xl text-white text-center uppercase font-bold mt-5 cursor-pointer hover:bg-teal-800 transition-all;
+	}
+}
+
+/* Componentes utilizados en Registrar | Login | Cambiar Password */
+@layer components {
+	.titulo-auth {
+		@apply text-teal-600 font-black text-6xl;
+	}
+
+	.titulo-auth span {
+		@apply text-gray-600;
+	}
+
+	.div-formulario {
+		@apply mt-10 md:mt-5 shadow-lg px-5 lg:px-10 py-10 rounded-xl bg-white;
+	}
+
+	.div-formulario-doctor {
+		@apply mt-10 md:mt-5 shadow-lg px-5 lg:px-10 py-10 rounded-xl bg-white;
+	}
+
+	.label-form {
+		@apply capitalize text-gray-600 block text-xl font-bold
+        before:content-['*'] before:mr-1 before:text-red-600;
+	}
+	.label-form-sub {
+		@apply capitalize text-gray-600 block text-base font-medium mt-2;
+	}
+
+	.label-disponibilidad {
+		@apply capitalize text-gray-600 block text-xl font-bold after:content-['(formato_24_horas)'] after:ml-1 after:text-xs after:font-normal after:italic after:lowercase 
+        before:content-['*'] before:mr-1 before:text-red-600;
+	}
+
+	.label-password {
+		@apply capitalize text-gray-600 block text-xl font-bold after:content-['(mínimo_6_caracteres)'] after:ml-1 after:text-xs after:font-normal after:italic after:lowercase 
+        before:content-['*'] before:mr-1 before:text-red-600;
+	}
+
+	.input-form {
+		@apply border w-full p-3 mt-3 bg-gray-50 rounded-xl focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600;
+	}
+
+	.nav-enlace {
+		@apply mt-10 lg:flex lg:justify-between;
+	}
+
+	.enlace {
+		@apply block cursor-pointer text-center text-gray-500 my-5 hover:text-gray-800 transition-colors hover:underline;
+	}
+}
+
+/* Componentes genéricos */
+@layer components {
+	.btn {
+		@apply bg-teal-600 
+        w-full  py-3 px-10 rounded-xl text-white text-center uppercase font-bold mt-5 cursor-pointer hover:bg-teal-800 transition-all;
+	}
+}
+
+/* Componentes utilizados en Notificacions */
+@layer components {
+	.titulo {
+		@apply font-semibold text-4xl text-teal-800;
+	}
+
+	.tab-texto-base {
+		@apply my-5 px-8 py-4 rounded-md cursor-pointer text-lg;
+	}
+
+	.tab-texto-activo {
+		@apply border-b-4 border-teal-700 text-teal-700 font-semibold;
+	}
+
+	.tab-texto-desactivo {
+		@apply text-gray-700;
+	}
+
+	.subtitulo {
+		@apply font-medium text-2xl;
+	}
+
+	.div-titulo {
+		@apply flex justify-end items-center pb-4;
+	}
+
+	.card-notif {
+		@apply border border-gray-300 text-gray-800 py-2 px-4 rounded-lg shadow-md cursor-pointer transition-all hover:border-teal-800 hover:border-2 mb-3
+		duration-200;
+	}
+}
+
+/* Clases utilizadas en las tablas */
+@layer components {
+	.tabla {
+		@apply w-full mt-6;
+	}
+
+	.tabla-head {
+		@apply bg-gray-100 rounded-lg border-b-2 border-gray-800
+		border-t;
+	}
+
+	.columna {
+		@apply p-3 font-semibold text-gray-500 tracking-wide text-left;
+	}
+
+	.tabla-body {
+		@apply bg-white divide-y divide-gray-200;
+	}
+
+	.tabla-celda {
+		@apply px-3 py-4 whitespace-nowrap;
+	}
+
+	.enlace-tabla {
+		@apply cursor-pointer  text-gray-500 hover:text-gray-800 transition-colors hover:underline;
+	}
+}
