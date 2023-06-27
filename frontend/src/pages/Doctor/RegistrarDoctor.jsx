@@ -181,7 +181,7 @@ const RegistrarDoctor = () => {
 				</form>
 
 				<nav className='nav-enlace'>
-					<Link to='/usuario' className='enlace'>
+					<Link to='/doctor' className='enlace'>
 						¿Ya tienes cuenta? Inicia Sesión
 					</Link>
 					<Link to='/' className='enlace'>

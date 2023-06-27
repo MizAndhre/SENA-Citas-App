@@ -1,9 +1,9 @@
-
-
 const PerfilDoctor = () => {
-  return (
-    <div>Perfil Doctor</div>
-  )
-}
+	return (
+		<>
+			<h1 className='titulo'>Perfil</h1>
+		</>
+	);
+};
 
-export default PerfilDoctor
+export default PerfilDoctor;

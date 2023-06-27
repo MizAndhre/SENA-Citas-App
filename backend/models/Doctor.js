@@ -42,7 +42,7 @@ const doctorSchema = new mongoose.Schema(
 			type: String,
 			default: "doctor",
 		},
-		activado: {
+		estado: {
 			type: String,
 			default: "pendiente",
 		},

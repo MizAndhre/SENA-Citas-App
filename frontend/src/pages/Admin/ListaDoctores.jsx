@@ -1,34 +1,61 @@
 import { useEffect, useState } from "react";
 import clienteAxios from "../../config/axios";
+import { toast } from "react-hot-toast";
+import useAlerta from "../../hooks/useAlerta";
+import useAuth from "../../hooks/useAuth";
 
 const ListaDoctores = () => {
 	const [doctores, setDoctores] = useState([]);
+	const { alertaError, alertaExito } = useAlerta();
+	const { autenticarUsuario } = useAuth();
+
+	const token = localStorage.getItem("token");
+	const config = {
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const obtenerDoctores = async () => {
+		try {
+			const { data } = await clienteAxios.get("/admins/obtener-doctores", config);
+			// console.log(data);
+			setDoctores(data);
+			autenticarUsuario();
+			// toast.custom(alertaExito(data.msg));
+		} catch (error) {
+			console.log(error.response.data.msg);
+		}
+	};
 
 	useEffect(() => {
-		const obtenerDoctores = async () => {
-			const token = localStorage.getItem("token");
-
-			const config = {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-			};
-
-			try {
-				const { data } = await clienteAxios.get("/admins/obtener-doctores", config);
-				// console.log(data);
-				setDoctores(data);
-				// toast.custom(alertaExito(data.msg));
-			} catch (error) {
-				console.log(error.response.data.msg);
-			}
-		};
-
 		obtenerDoctores();
 	}, []);
 
-	
+	const cambiarEstadoDoctor = async (doctorId, estado) => {
+		console.log(doctorId, estado);
+
+		try {
+			//url y enviar datos al backend
+			const url = "/admins/cambiar-estado-doctores";
+			const { data } = await clienteAxios.post(
+				url,
+				{
+					doctorId,
+					estado,
+				},
+				config
+			);
+			console.log(data);
+			toast.custom(alertaExito(data.msg));
+			obtenerDoctores();
+		} catch (error) {
+			toast.custom(alertaError(error.response.data.msg));
+			console.log(error.response.data);
+		}
+	};
+
 	return (
 		<>
 			<h1 className='titulo'> Lista de Doctores</h1>
@@ -53,10 +80,18 @@ const ListaDoctores = () => {
 								<td className='tabla-celda'>{doctor.nombre}</td>
 								<td className='tabla-celda'>{doctor.email}</td>
 								<td className='tabla-celda'>{doctor.createdAt}</td>
-								<td className='tabla-celda capitalize'>{doctor.activado}</td>
+								<td className='tabla-celda capitalize'>{doctor.estado}</td>
 								<td className='tabla-celda enlace-tabla'>
-									{doctor.activado === "pendiente" && "Aprobar"}
-									{doctor.activado === "aprobado" && "Bloquear"}
+									{doctor.estado === "pendiente" && (
+										<p onClick={() => cambiarEstadoDoctor(doctor._id, "aprobada")}>
+											Aprobar
+										</p>
+									)}
+									{doctor.estado === "aprobada" && (
+										<p onClick={() => cambiarEstadoDoctor(doctor._id, "bloqueada")}>
+											Bloquear
+										</p>
+									)}
 								</td>
 							</tr>
 						))}

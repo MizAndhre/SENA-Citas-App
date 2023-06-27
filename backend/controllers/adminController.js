@@ -121,7 +121,7 @@ const eliminarNotificaciones = async (req, res) => {
 
 		// console.log(admin, "ADMIN");
 	} catch (e) {
-		const error = new Error("Error al marcar como leídos");
+		const error = new Error("Error al eliminar");
 		return res.status(403).json({ msg: error.message });
 	}
 };
@@ -129,22 +129,58 @@ const eliminarNotificaciones = async (req, res) => {
 const obtenerPacientes = async (req, res) => {
 	try {
 		const usuarios = await Usuario.find({});
-		console.log(usuarios);
+		// console.log(usuarios);
 		res.json(usuarios);
 	} catch (error) {
-		console.log("Error al registrar", error);
+		console.log("Error al obtener pacientes", error);
 	}
 };
 
 const obtenerDoctores = async (req, res) => {
 	try {
 		const doctores = await Doctor.find({});
-		console.log(doctores);
+		// console.log(doctores);
 		res.json(doctores);
 	} catch (error) {
-		console.log("Error al registrar", error);
+		console.log("Error al obtener doctores", error);
 	}
 };
+
+const cambiarEstadoDoctor = async (req, res) => {
+	try {
+		const { doctorId, estado } = req.body;
+		const doctor = await Doctor.findByIdAndUpdate(doctorId, {
+			estado,
+		});
+
+		//Enviar NOTIF al doctor sobre la cuenta
+		const unseenNotif = doctor.unseenNotif;
+		unseenNotif.push({
+			type: "estado-cuenta-doctor-cambiado",
+			msg: `Su cuenta de doctor ha sido ${estado}`,
+			onClickPath: "/doctor/perfil/notificacion",
+		});
+		await doctor.save();
+		// doctor.estado = "";
+
+		//Enviar NOTIF al Admin
+		const adminUser = await Admin.findOne();
+		const unseenNotifAdmin = adminUser.unseenNotif;
+		unseenNotifAdmin.push({
+			type: "estado-cuenta-doctor-cambiado",
+			msg: `La cuenta del doctor ${doctor.nombre} ha sido ${estado}`,
+			onClickPath: "/admin/perfil/lista-doctores",
+		});
+		await adminUser.save();
+
+		res.json({ msg: "Estado del doctor cambiado correctamente" });
+	} catch (error) {
+		const e = new Error("Error al cambiar el estado del doctor");
+		return res.status(400).json({ msg: e.message });
+	}
+};
+
+
 
 export {
 	registrar,
@@ -154,6 +190,7 @@ export {
 	eliminarNotificaciones,
 	obtenerPacientes,
 	obtenerDoctores,
+	cambiarEstadoDoctor,
 };
 
 // router.get("/get-all-users", authMiddleware, async (req, res) => {

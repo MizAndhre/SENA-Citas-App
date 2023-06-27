@@ -1,8 +1,8 @@
 import { useState } from "react";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-const NotifAdmin = () => {
+const Notificaciones = () => {
 	const [activeTab, setActiveTab] = useState(1);
 	const { auth, marcarLeidos, eliminarNotificaciones } = useAuth();
 
@@ -84,4 +84,4 @@ const NotifAdmin = () => {
 	);
 };
 
-export default NotifAdmin;
+export default Notificaciones;

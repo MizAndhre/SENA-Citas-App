@@ -13,9 +13,8 @@ const AuthProvider = ({ children }) => {
 	const { alertaError, alertaExito } = useAlerta();
 
 	console.log(auth);
-	// console.log(auth.nombre);
-	// console.log(auth.role);
 
+	// ? Obtener los diferentes perfiles según el Usuario
 	const obtenerPerfilPaciente = async (config) => {
 		// Lógica para obtener perfil de paciente
 		try {
@@ -31,7 +30,6 @@ const AuthProvider = ({ children }) => {
 			setAuth({});
 		}
 	};
-
 	const obtenerPerfilDoctor = async (config) => {
 		// Lógica para obtener perfil de doctor
 		// Utiliza la API correspondiente para obtener la información del doctor
@@ -44,7 +42,6 @@ const AuthProvider = ({ children }) => {
 			setAuth({});
 		}
 	};
-
 	const obtenerPerfilAdmin = async (config) => {
 		// Lógica para obtener perfil de administrador
 		// Utiliza la API correspondiente para obtener la información del administrador
@@ -57,53 +54,76 @@ const AuthProvider = ({ children }) => {
 			setAuth({});
 		}
 	};
+	// ? Autenticar y verificar qué tipo de usuario es, actualiza los componentes
+	const autenticarUsuario = async () => {
+		const token = localStorage.getItem("token");
+		const role = localStorage.getItem("role");
 
-	useEffect(() => {
-		const autenticarUsuario = async () => {
-			const token = localStorage.getItem("token");
-			const role = localStorage.getItem("role");
-
-			if (!token || !role) {
-				setCargando(false);
-				return;
-			}
-
-			const config = {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-			};
-
-			try {
-				if (role === "usuario") {
-					await obtenerPerfilPaciente(config);
-				} else if (role === "doctor") {
-					await obtenerPerfilDoctor(config);
-				} else if (role === "admin") {
-					await obtenerPerfilAdmin(config);
-				}
-			} catch (error) {
-				console.log(error.response.data.msg);
-				setAuth({});
-			}
-
+		if (!token || !role) {
 			setCargando(false);
+			return;
+		}
+
+		const config = {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
 		};
 
+		try {
+			if (role === "usuario") {
+				await obtenerPerfilPaciente(config);
+			} else if (role === "doctor") {
+				await obtenerPerfilDoctor(config);
+			} else if (role === "admin") {
+				await obtenerPerfilAdmin(config);
+			}
+		} catch (error) {
+			console.log(error.response.data.msg);
+			setAuth({});
+		}
+
+		setCargando(false);
+	};
+	// ? Mandar a llamar autenticacion del Usuario cuando la pagina cargue una vez
+	useEffect(() => {
 		autenticarUsuario();
 	}, []);
 
+	// ? Cerrar la sesión de cualquier usuario
 	const cerrarSesion = () => {
 		localStorage.removeItem("token");
 		localStorage.removeItem("role");
 		setAuth({});
 	};
 
-	const obtenerNotifPaciente = () => {};
+	// ? Obtener las Notificaciones según el usuario
+	// ! Falta Terminar
+	const obtenerNotifPaciente = async (config) => {
+		try {
+			const url = "/usuarios/marcar-leidos";
+			// console.log(auth._id);
+			const { data } = await clienteAxios.post(url, { _id: auth._id }, config);
 
-	const obtenerNotifDoctor = () => {};
+			// console.log(data);
+			toast.custom(alertaExito(data.msg));
+		} catch (error) {
+			toast.custom(alertaError(error.response.data.msg));
+		}
+	};
+	const obtenerNotifDoctor = async (config) => {
+		try {
+			const url = "/doctores/marcar-leidos";
+			// console.log(auth._id);
+			const { data } = await clienteAxios.post(url, { _id: auth._id }, config);
 
+			// console.log(data);
+			toast.custom(alertaExito(data.msg));
+		} catch (error) {
+			toast.custom(alertaError(error.response.data.msg));
+		}
+	};
 	const obtenerNotifAdmin = async (config) => {
 		try {
 			const url = "/admins/marcar-leidos";
@@ -116,7 +136,7 @@ const AuthProvider = ({ children }) => {
 			toast.custom(alertaError(error.response.data.msg));
 		}
 	};
-
+	// ? Autenticar y verificar el usuario para marcar las Notificaciones
 	const marcarLeidos = async () => {
 		const token = localStorage.getItem("token");
 		const role = localStorage.getItem("role");
@@ -141,12 +161,25 @@ const AuthProvider = ({ children }) => {
 			console.log(error.response.data.msg);
 			setAuth({});
 		}
+
+		autenticarUsuario();
 	};
 
+	// ? Eliminar las Notificaciones según el usuario
+	// ! Falta Terminar
 	const eliminarNotifPaciente = () => {};
+	const eliminarNotifDoctor = async (config) => {
+		try {
+			const url = "/doctores/eliminar-notificaciones";
+			console.log(auth._id);
+			const { data } = await clienteAxios.post(url, { _id: auth._id }, config);
 
-	const eliminarNotifDoctor = () => {};
-
+			console.log(data);
+			toast.custom(alertaExito(data.msg));
+		} catch (error) {
+			toast.custom(alertaError(error.response.data.msg));
+		}
+	};
 	const eliminarNotifAdmin = async (config) => {
 		try {
 			const url = "/admins/eliminar-notificaciones";
@@ -159,7 +192,7 @@ const AuthProvider = ({ children }) => {
 			toast.custom(alertaError(error.response.data.msg));
 		}
 	};
-
+	// ? Autenticar y verificar el usuario para eliminar las Notificaciones
 	const eliminarNotificaciones = async () => {
 		const token = localStorage.getItem("token");
 		const role = localStorage.getItem("role");
@@ -184,38 +217,60 @@ const AuthProvider = ({ children }) => {
 			console.log(error.response.data.msg);
 			setAuth({});
 		}
+
+		autenticarUsuario();
 	};
 
-	// const actualizarPerfil = async (datos) => {
-	// 	const token = localStorage.getItem("token");
+	// ? Actualizar el perfil según el usuario
+	// ! Falta Terminar
+	const actualizarPerfilPaciente = async (config, datos) => {};
+	const actualizarPerfilAdmin = async (config, datos) => {};
+	const actualizarPerfilDoctor = async (config, datos) => {
+		try {
+			const url = `/doctores/perfil/${datos._id}`;
+			const { data } = await clienteAxios.put(url, datos, config);
+			console.log(data);
 
-	// 	if (!token) {
-	// 		setCargando(false);
-	// 		return;
-	// 	}
+			toast.custom(alertaExito("Actualizado Correctamente"));
+		} catch (error) {
+			return {
+				msg: error.response.data.msg,
+				error: true,
+			};
+		}
+	};
+	// ? Autenticar y verificar el usuario para actualizarlo
+	const actualizarPerfil = async (datos) => {
+		const token = localStorage.getItem("token");
+		const role = localStorage.getItem("role");
 
-	// 	const config = {
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 			Authorization: `Bearer ${token}`,
-	// 		},
-	// 	};
-	// 	try {
-	// 		const url = `/veterinarios/perfil/${datos._id}`;
-	// 		const { data } = await clienteAxios.put(url, datos, config);
-	// 		console.log(data);
-	// 		return {
-	// 			msg: "Almacenado Correctamente",
-	// 			error: false,
-	// 		};
-	// 	} catch (error) {
-	// 		return {
-	// 			msg: error.response.data.msg,
-	// 			error: true,
-	// 		};
-	// 	}
-	// };
+		if (!token) {
+			setCargando(false);
+			return;
+		}
 
+		const config = {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+		};
+
+		try {
+			if (role === "usuario") {
+				await actualizarPerfilPaciente(config, datos);
+			} else if (role === "doctor") {
+				await actualizarPerfilDoctor(config, datos);
+			} else if (role === "admin") {
+				await actualizarPerfilAdmin(config, datos);
+			}
+		} catch (error) {
+			console.log(error.response.data.msg);
+			setAuth({});
+		}
+	};
+
+	// ? Autenticar y verificar el usuario para realizar cambio de contraseña
 	// const guardarPassword = async (datos) => {
 	// 	const token = localStorage.getItem("token");
 
@@ -252,11 +307,12 @@ const AuthProvider = ({ children }) => {
 			value={{
 				auth,
 				setAuth,
+				autenticarUsuario,
 				cargando,
 				cerrarSesion,
 				marcarLeidos,
 				eliminarNotificaciones,
-				// actualizarPerfil,
+				actualizarPerfil,
 				// guardarPassword,
 			}}>
 			{children}

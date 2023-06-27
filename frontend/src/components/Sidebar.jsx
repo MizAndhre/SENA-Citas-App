@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const Sidebar = () => {
 	const { auth } = useAuth();
+	const location = useLocation();
 
+	console.log(location);
 	// Obtener un menu dependiendo del ROLE que está en el Context de Auth
 	const obtenerMenu = () => {
 		if (auth.role === "usuario") {
@@ -34,22 +36,22 @@ const Sidebar = () => {
 			return [
 				{
 					name: "Inicio",
-					link: "/paciente/perfil",
+					link: "/doctor/perfil",
 					icon: "fa-solid fa-house",
 				},
 				{
 					name: "Citas",
-					link: "/paciente/perfil",
+					link: "/doctor/perfil",
 					icon: "fa-solid fa-calendar",
 				},
 				{
 					name: "Historial Citas",
-					link: "/paciente/perfil",
+					link: "/doctor/perfil",
 					icon: "fa-solid fa-clipboard-list",
 				},
 				{
 					name: "Perfil",
-					link: "/paciente/perfil",
+					link: "/doctor/perfil/editar",
 					icon: "fa-solid fa-user",
 				},
 			];
@@ -104,11 +106,13 @@ const Sidebar = () => {
 							<Link
 								to={menu.link}
 								key={i}
-								className='
-								group flex items-center text-xl
+								className={`group flex items-center text-xl
 								hover:bg-teal-900
 								 gap-3.5 font-semibold py-2 px-4 rounded-md
-								'>
+
+								 ${location.pathname === menu.link && "bg-teal-950"}
+
+								`}>
 								<div className='text-2xl'>
 									<i className={menu.icon}></i>
 								</div>

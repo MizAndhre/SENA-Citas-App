@@ -32,7 +32,7 @@ const registrar = async (req, res) => {
 
 		//Enviar email [tentativo]
 
-		//Enviar Notificacion al ADMIN
+		//! Enviar Notificacion al ADMIN
 		const adminUser = await Admin.findOne();
 		const unseenNotif = adminUser.unseenNotif;
 		unseenNotif.push({
@@ -77,7 +77,7 @@ const login = async (req, res) => {
 			role: doctor.role,
 			horaInicio: doctor.horaInicio,
 			horaFinal: doctor.horaFinal,
-			activado: doctor.activado,
+			estado: doctor.estado,
 			seenNotif: doctor.seenNotif,
 			unseenNotif: doctor.unseenNotif,
 			token: generarJWT(doctor.id, doctor.role),
@@ -94,4 +94,82 @@ const perfil = (req, res) => {
 	res.json(doctor);
 };
 
-export { registrar, perfil, login };
+const marcarLeidos = async (req, res) => {
+	const { _id } = req.body;
+
+	try {
+		const doctor = await Doctor.findOne({ _id });
+
+		// console.log(doctor);
+		const unseenNotif = doctor.unseenNotif;
+
+		const seenNotif = doctor.seenNotif;
+
+		seenNotif.push(...unseenNotif);
+		doctor.unseenNotif = [];
+		doctor.seenNotif = seenNotif;
+
+		const actualizarDoctor = await doctor.save();
+
+		res.json({ msg: "Notificaciones marcadas como leída correctamente" });
+
+		// console.log(admin, "ADMIN");
+	} catch (e) {
+		const error = new Error("Error al marcar como leídos");
+		return res.status(403).json({ msg: error.message });
+	}
+};
+
+const eliminarNotificaciones = async (req, res) => {
+	const { _id } = req.body;
+
+	try {
+		const doctor = await Doctor.findOne({ _id });
+
+		// console.log(doctor);
+
+		// doctor.unseenNotif = [];
+		doctor.seenNotif = [];
+
+		const actualizarDoctor = await doctor.save();
+
+		res.json({ msg: "Notificaciones marcadas como leída correctamente" });
+
+		// console.log(admin, "ADMIN");
+	} catch (e) {
+		const error = new Error("Error al eliminar");
+		return res.status(403).json({ msg: error.message });
+	}
+};
+
+const actualizarPerfil = async (req, res) => {
+	const doctor = await Doctor.findById(req.params.id);
+	if (!doctor) {
+		const error = new Error("Hubo un error");
+		return res.status(400).json({ msg: error.message });
+	}
+
+	const { email } = req.body;
+	if (doctor.email !== req.body.email) {
+		const existeEmail = await Doctor.findOne({ email });
+		if (existeEmail) {
+			const error = new Error("Email ya está en uso");
+			return res.status(400).json({ msg: error.message });
+		}
+	}
+
+	try {
+		doctor.nombre = req.body.nombre;
+		doctor.email = req.body.email;
+		doctor.especialidad = req.body.especialidad;
+		doctor.horaInicio = req.body.horaInicio;
+		doctor.horaFinal = req.body.horaFinal;
+
+		const doctorActualizado = await doctor.save();
+		res.json(doctorActualizado);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export { registrar, perfil, login, marcarLeidos, eliminarNotificaciones, actualizarPerfil };

@@ -26,9 +26,10 @@ import RegistrarDoctor from "./pages/Doctor/RegistrarDoctor";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
 import RutaProtegidaAdmin from "./layout/RutaProtegidaAdmin";
 import PerfilAdmin from "./pages/Admin/PerfilAdmin";
-import NotifAdmin from "./pages/Admin/NotifAdmin";
+import Notificaciones from "./components/Notificaciones";
 import ListaDoctores from "./pages/Admin/ListaDoctores";
 import ListaPacientes from "./pages/Admin/ListaPacientes";
+import EditarPerfilDoctor from "./pages/Doctor/EditarPerfilDoctor";
 
 // import OlvidePassword from "../not_used/OlvidePassword";
 
@@ -69,19 +70,20 @@ function App() {
 							{/* Rutas Privadas Paciente*/}
 							<Route path='/paciente/perfil' element={<RutaProtegida />}>
 								<Route index element={<Perfil />} />
-								{/* <Route path='' element={<Perfil />} /> */}
+								<Route path='notificacion' element={<Notificaciones />} />
 							</Route>
 
 							{/* Rutas Privadas Paciente*/}
 							<Route path='/doctor/perfil/' element={<RutaProtegidaDr />}>
 								<Route index element={<PerfilDoctor />} />
-								{/* <Route path='perfil' element={<PerfilDoctor />} /> */}
+								<Route path='notificacion' element={<Notificaciones />} />
+								<Route path='editar' element={<EditarPerfilDoctor />} />
 							</Route>
 
 							{/* Rutas Privadas Paciente*/}
 							<Route path='/admin/perfil' element={<RutaProtegidaAdmin />}>
 								<Route index element={<PerfilAdmin />} />
-								<Route path='notificacion' element={<NotifAdmin />} />
+								<Route path='notificacion' element={<Notificaciones />} />
 								<Route path='lista-doctores' element={<ListaDoctores />} />
 								<Route path='lista-pacientes' element={<ListaPacientes />} />
 							</Route>

@@ -145,3 +145,10 @@
 		@apply cursor-pointer  text-gray-500 hover:text-gray-800 transition-colors hover:underline;
 	}
 }
+
+/* Clases utilizadas Form cambiar info */
+@layer components {
+	.div-form-editar {
+		@apply px-5 lg:px-10 py-5 rounded-xl bg-white;
+	}
+}

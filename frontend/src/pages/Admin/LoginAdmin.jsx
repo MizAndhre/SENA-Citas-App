@@ -91,9 +91,9 @@ const LoginAdmin = () => {
 				</form>
 
 				<nav className='nav-enlace'>
-					<Link to='/usuario/registrar' className='enlace'>
+					{/* <Link to='/usuario/registrar' className='enlace'>
 						¿No tienes cuenta? Regístrate
-					</Link>
+					</Link> */}
 					<Link to='/' className='enlace'>
 						Volver al inicio
 					</Link>
