@@ -78,7 +78,9 @@ const perfil = (req, res) => {
 
 const obtenerDoctoresAprobados = async (req, res) => {
 	try {
-		const doctores = await Doctor.find({ estado: "aprobada" }).select("-password -__v -token -unseenNotif -seenNotif");
+		const doctores = await Doctor.find({ estado: "aprobada" }).select(
+			"-password -__v -token -unseenNotif -seenNotif"
+		);
 		// console.log(doctores);
 		res.json(doctores);
 	} catch (error) {
@@ -86,4 +88,17 @@ const obtenerDoctoresAprobados = async (req, res) => {
 	}
 };
 
-export { registrar, perfil, login, obtenerDoctoresAprobados };
+const obtenerDoctorId = async (req, res) => {
+	const { id } = req.params;
+	try {
+		const doctor = await Doctor.find({ _id: id }).select(
+			"-password -__v -token -unseenNotif -seenNotif"
+		);
+		// console.log(doctor);
+		res.json(doctor);
+	} catch (error) {
+		console.log("Error al obtener doctores", error);
+	}
+};
+
+export { registrar, perfil, login, obtenerDoctoresAprobados, obtenerDoctorId };

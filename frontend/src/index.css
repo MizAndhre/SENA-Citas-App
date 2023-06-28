@@ -156,7 +156,7 @@
 /* Clases tarjetas */
 @layer components {
 	.div-card {
-		@apply lg:max-w-xs max-w-sm p-6 bg-white border border-teal-800 rounded-lg shadow-lg mt-5 hover:scale-105 cursor-pointer;
+		@apply lg:max-w-xs max-w-sm p-8 bg-white border border-teal-800 rounded-lg shadow-lg mt-5 hover:scale-105 cursor-pointer;
 	}
 
 	.div-card-icono {

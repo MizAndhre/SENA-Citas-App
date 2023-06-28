@@ -60,12 +60,12 @@ const Perfil = () => {
 							</span>
 						</p>
 
-						<Link
+						<div
 							className='div-card-btn'
-							onClick={() => navigate(`programar-cita/${doctor._id}`)}>
+							onClick={() => navigate(`/paciente/perfil/programar-cita/${doctor._id}`)}>
 							Programa cita
-							<i className='fa-solid fa-arrow-right-long'></i>
-						</Link>
+							<i className='fa-solid fa-arrow-right-long pr-2'></i>
+						</div>
 					</div>
 				))}
 			</div>

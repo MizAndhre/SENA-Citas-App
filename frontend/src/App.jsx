@@ -13,14 +13,16 @@ import Inicio from "./pages/Inicio";
 //Usuario/Paciente
 import Login from "./pages/Login";
 import Registrar from "./pages/Registrar";
-import Perfil from "./pages/Paciente/Perfil";
 import RutaProtegida from "./layout/RutaProtegida";
+import Perfil from "./pages/Paciente/Perfil";
+import ProgramarCita from "./pages/Paciente/ProgramarCita";
 
 // Doctor
 import LoginDoctor from "./pages/Doctor/LoginDoctor";
 import RutaProtegidaDr from "./layout/RutaProtegidaDr";
 import PerfilDoctor from "./pages/Doctor/PerfilDoctor";
 import RegistrarDoctor from "./pages/Doctor/RegistrarDoctor";
+import EditarPerfilDoctor from "./pages/Doctor/EditarPerfilDoctor";
 
 // Admin
 import LoginAdmin from "./pages/Admin/LoginAdmin";
@@ -29,7 +31,6 @@ import PerfilAdmin from "./pages/Admin/PerfilAdmin";
 import Notificaciones from "./components/Notificaciones";
 import ListaDoctores from "./pages/Admin/ListaDoctores";
 import ListaPacientes from "./pages/Admin/ListaPacientes";
-import EditarPerfilDoctor from "./pages/Doctor/EditarPerfilDoctor";
 
 // import OlvidePassword from "../not_used/OlvidePassword";
 
@@ -71,6 +72,7 @@ function App() {
 							<Route path='/paciente/perfil' element={<RutaProtegida />}>
 								<Route index element={<Perfil />} />
 								<Route path='notificacion' element={<Notificaciones />} />
+								<Route path='programar-cita/:id' element={<ProgramarCita />} />
 							</Route>
 
 							{/* Rutas Privadas Paciente*/}
