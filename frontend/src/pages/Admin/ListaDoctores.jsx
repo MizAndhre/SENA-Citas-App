@@ -32,7 +32,7 @@ const ListaDoctores = () => {
 	useEffect(() => {
 		obtenerDoctores();
 	}, []);
-
+	console.log(doctores);
 	const cambiarEstadoDoctor = async (doctorId, estado) => {
 		console.log(doctorId, estado);
 

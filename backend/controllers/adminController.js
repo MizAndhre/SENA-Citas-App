@@ -128,7 +128,9 @@ const eliminarNotificaciones = async (req, res) => {
 
 const obtenerPacientes = async (req, res) => {
 	try {
-		const usuarios = await Usuario.find({});
+		const usuarios = await Usuario.find({}).select(
+			"-password -__v -token -unseenNotif -seenNotif"
+		);
 		// console.log(usuarios);
 		res.json(usuarios);
 	} catch (error) {
@@ -138,7 +140,9 @@ const obtenerPacientes = async (req, res) => {
 
 const obtenerDoctores = async (req, res) => {
 	try {
-		const doctores = await Doctor.find({});
+		const doctores = await Doctor.find({}).select(
+			"-password -__v -token -unseenNotif -seenNotif"
+		);
 		// console.log(doctores);
 		res.json(doctores);
 	} catch (error) {
@@ -179,8 +183,6 @@ const cambiarEstadoDoctor = async (req, res) => {
 		return res.status(400).json({ msg: e.message });
 	}
 };
-
-
 
 export {
 	registrar,

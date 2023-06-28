@@ -80,6 +80,14 @@
 
 /* Componentes genéricos */
 @layer components {
+	.titulo {
+		@apply font-semibold text-4xl text-teal-800;
+	}
+
+	.subtitulo {
+		@apply font-medium text-2xl my-5 text-gray-600;
+	}
+
 	.btn {
 		@apply bg-teal-600 
         w-full  py-3 px-10 rounded-xl text-white text-center uppercase font-bold mt-5 cursor-pointer hover:bg-teal-800 transition-all;
@@ -88,10 +96,6 @@
 
 /* Componentes utilizados en Notificacions */
 @layer components {
-	.titulo {
-		@apply font-semibold text-4xl text-teal-800;
-	}
-
 	.tab-texto-base {
 		@apply my-5 px-8 py-4 rounded-md cursor-pointer text-lg;
 	}
@@ -102,10 +106,6 @@
 
 	.tab-texto-desactivo {
 		@apply text-gray-700;
-	}
-
-	.subtitulo {
-		@apply font-medium text-2xl;
 	}
 
 	.div-titulo {
@@ -150,5 +150,31 @@
 @layer components {
 	.div-form-editar {
 		@apply px-5 lg:px-10 py-5 rounded-xl bg-white;
+	}
+}
+
+/* Clases tarjetas */
+@layer components {
+	.div-card {
+		@apply lg:max-w-xs max-w-sm p-6 bg-white border border-teal-800 rounded-lg shadow-lg mt-5 hover:scale-105 cursor-pointer;
+	}
+
+	.div-card-icono {
+		@apply text-2xl font-bold text-gray-700 pr-2;
+	}
+
+	.div-card-titulo {
+		@apply mb-3 text-2xl font-bold tracking-tight text-gray-700 pb-2 border-b border-gray-800;
+	}
+
+	.div-card-atributo {
+		@apply mb-3 font-semibold text-gray-600;
+	}
+	.div-card-btn {
+		@apply inline-flex cursor-pointer items-center px-3 py-2 text-sm font-medium text-center text-white bg-teal-600 rounded-lg hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 transition-all;
+	}
+
+	.div-card-btn > i {
+		@apply pr-2;
 	}
 }

@@ -1,6 +1,7 @@
 //crear controladores para las diferentes rutas
 
 import generarJWT from "../helpers/generarJWT.js";
+import Doctor from "../models/Doctor.js";
 import Usuario from "../models/Usuario.js";
 
 import bcrypt from "bcrypt";
@@ -75,4 +76,14 @@ const perfil = (req, res) => {
 	res.json(usuario);
 };
 
-export { registrar, perfil, login };
+const obtenerDoctoresAprobados = async (req, res) => {
+	try {
+		const doctores = await Doctor.find({ estado: "aprobada" }).select("-password -__v -token -unseenNotif -seenNotif");
+		// console.log(doctores);
+		res.json(doctores);
+	} catch (error) {
+		console.log("Error al obtener doctores", error);
+	}
+};
+
+export { registrar, perfil, login, obtenerDoctoresAprobados };

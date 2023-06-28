@@ -6,7 +6,7 @@ const Sidebar = () => {
 	const { auth } = useAuth();
 	const location = useLocation();
 
-	console.log(location);
+	// console.log(location);
 	// Obtener un menu dependiendo del ROLE que está en el Context de Auth
 	const obtenerMenu = () => {
 		if (auth.role === "usuario") {
