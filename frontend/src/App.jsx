@@ -31,6 +31,13 @@ import PerfilAdmin from "./pages/Admin/PerfilAdmin";
 import Notificaciones from "./components/Notificaciones";
 import ListaDoctores from "./pages/Admin/ListaDoctores";
 import ListaPacientes from "./pages/Admin/ListaPacientes";
+import VerCitas from "./pages/Paciente/VerCitas";
+import SolicitudCitas from "./pages/Doctor/SolicitudCitas";
+import CitasProgramadas from "./pages/Doctor/CitasProgramadas";
+import HistorialDoctor from "./pages/Doctor/HistorialDoctor";
+import HistorialPaciente from "./pages/Paciente/HistorialPaciente";
+import EditarPerfilPaciente from "./pages/Paciente/EditarPerfilPaciente";
+import HistorialAdmin from "./pages/Admin/HistorialAdmin";
 
 // import OlvidePassword from "../not_used/OlvidePassword";
 
@@ -72,7 +79,10 @@ function App() {
 							<Route path='/paciente/perfil' element={<RutaProtegida />}>
 								<Route index element={<Perfil />} />
 								<Route path='notificacion' element={<Notificaciones />} />
+								<Route path='editar' element={<EditarPerfilPaciente />} />
 								<Route path='programar-cita/:id' element={<ProgramarCita />} />
+								<Route path='ver-citas' element={<VerCitas />} />
+								<Route path='historial-citas' element={<HistorialPaciente />} />
 							</Route>
 
 							{/* Rutas Privadas Paciente*/}
@@ -80,6 +90,9 @@ function App() {
 								<Route index element={<PerfilDoctor />} />
 								<Route path='notificacion' element={<Notificaciones />} />
 								<Route path='editar' element={<EditarPerfilDoctor />} />
+								<Route path='solicitud-citas' element={<SolicitudCitas />} />
+								<Route path='citas-programadas' element={<CitasProgramadas />} />
+								<Route path='historial-citas' element={<HistorialDoctor />} />
 							</Route>
 
 							{/* Rutas Privadas Paciente*/}
@@ -88,6 +101,7 @@ function App() {
 								<Route path='notificacion' element={<Notificaciones />} />
 								<Route path='lista-doctores' element={<ListaDoctores />} />
 								<Route path='lista-pacientes' element={<ListaPacientes />} />
+								<Route path='historial-citas' element={<HistorialAdmin />} />
 							</Route>
 
 							<Route path='*' element={<Navigate to='/' />} />

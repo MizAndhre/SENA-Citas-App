@@ -18,17 +18,17 @@ const Sidebar = () => {
 				},
 				{
 					name: "Citas",
-					link: "/paciente/perfil",
+					link: "/paciente/perfil/ver-citas",
 					icon: "fa-solid fa-calendar",
 				},
 				{
 					name: "Historial Citas",
-					link: "/paciente/perfil",
+					link: "/paciente/perfil/historial-citas",
 					icon: "fa-solid fa-clipboard-list",
 				},
 				{
 					name: "Perfil",
-					link: "/paciente/perfil",
+					link: "/paciente/perfil/editar",
 					icon: "fa-solid fa-user",
 				},
 			];
@@ -40,13 +40,18 @@ const Sidebar = () => {
 					icon: "fa-solid fa-house",
 				},
 				{
-					name: "Citas",
-					link: "/doctor/perfil",
+					name: "Citas Solicitadas",
+					link: "/doctor/perfil/solicitud-citas",
+					icon: "fa-solid fa-calendar-check",
+				},
+				{
+					name: "Citas Programadas",
+					link: "/doctor/perfil/citas-programadas",
 					icon: "fa-solid fa-calendar",
 				},
 				{
 					name: "Historial Citas",
-					link: "/doctor/perfil",
+					link: "/doctor/perfil/historial-citas",
 					icon: "fa-solid fa-clipboard-list",
 				},
 				{
@@ -73,9 +78,9 @@ const Sidebar = () => {
 					icon: "fa-solid fa-clipboard-list",
 				},
 				{
-					name: "Agregar Doctor",
-					link: "/admin/perfil",
-					icon: "fa-solid fa-user",
+					name: "Historial Citas",
+					link: "/admin/perfil/historial-citas",
+					icon: "fa-solid fa-clipboard-list",
 				},
 			];
 		} else {
@@ -90,7 +95,10 @@ const Sidebar = () => {
 	return (
 		<>
 			<section className='flex gap-6'>
-				<div className={`bg-teal-800 h-screen ${open ? "w-72" : "w-16"} text-white px-4`}>
+				<div
+					className={`bg-gradient-to-br from-teal-800 to-teal-900 h-screen  ${
+						open ? "w-72" : "w-16"
+					} text-white px-4`}>
 					{/* ? ICONO */}
 					<div className='py-3 flex justify-end'>
 						<i
@@ -108,7 +116,7 @@ const Sidebar = () => {
 								key={i}
 								className={`group flex items-center text-xl
 								hover:bg-teal-900
-								 gap-3.5 font-semibold py-2 px-4 rounded-md
+								 gap-3.5 font-semibold py-2 ${open ? "px-4" : "px-2"} rounded-md
 
 								 ${location.pathname === menu.link && "bg-teal-950"}
 
@@ -143,23 +151,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-{
-	/* <section className='flex gap-6'>
-				<div className='bg-teal-600 min-h-screen w-72 text-black px-4'>
-					<div className='py-3 flex justify-end'>
-						<i className='fa-solid fa-bars cursor-pointer text-2xl'></i>
-					</div>
-					<div className='mt-4 flex flex-col gap-4 relative'>
-						<Link to={"/"}>
-							<div>
-								<i className='fa-solid fa-bars cursor-pointer text-2xl'></i>
-							</div>
-							<h2>Home</h2>
-						</Link>
-					</div>
-				</div>
-
-				<div className='m-3 text-xl text-gray-900 font-semibold'>Tutorial</div>
-			</section> */
-}

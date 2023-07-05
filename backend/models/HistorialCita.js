@@ -2,9 +2,24 @@ import mongoose from "mongoose";
 
 const historialCitaSchema = new mongoose.Schema(
 	{
-		cita: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Cita",
+		citaId: {
+			type: String,
+			required: true,
+		},
+		usuarioId: {
+			type: String,
+			required: true,
+		},
+		doctorId: {
+			type: String,
+			required: true,
+		},
+		usuarioInfo: {
+			type: Object,
+			required: true,
+		},
+		doctorInfo: {
+			type: Object,
 			required: true,
 		},
 		fecha: {
@@ -23,16 +38,6 @@ const historialCitaSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		doctor: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Doctor",
-			required: true,
-		},
-		usuario: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Usuario",
-			required: true,
-		},
 	},
 	{
 		timestamps: true,
@@ -42,5 +47,3 @@ const historialCitaSchema = new mongoose.Schema(
 //registrarlo en mongoose
 const HistorialCita = mongoose.model("HistorialCita", historialCitaSchema);
 export default HistorialCita;
-
-

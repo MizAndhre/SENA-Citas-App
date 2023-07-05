@@ -2,9 +2,12 @@
 
 import generarJWT from "../helpers/generarJWT.js";
 import Admin from "../models/Admin.js";
+import Cita from "../models/Cita.js";
 import Doctor from "../models/Doctor.js";
 
 import bcrypt from "bcrypt";
+import Usuario from "../models/Usuario.js";
+import HistorialCita from "../models/HistorialCita.js";
 
 const registrar = async (req, res) => {
 	// res.send("Desde API Veterinarios CONTROLLER"); para enviar algo a la web
@@ -133,7 +136,7 @@ const eliminarNotificaciones = async (req, res) => {
 
 		const actualizarDoctor = await doctor.save();
 
-		res.json({ msg: "Notificaciones marcadas como leída correctamente" });
+		res.json({ msg: "Notificaciones eliminadas correctamente" });
 
 		// console.log(admin, "ADMIN");
 	} catch (e) {
@@ -172,4 +175,154 @@ const actualizarPerfil = async (req, res) => {
 	}
 };
 
-export { registrar, perfil, login, marcarLeidos, eliminarNotificaciones, actualizarPerfil };
+const obtenerCitasSolicitud = async (req, res) => {
+	const { _id } = req.doctor;
+
+	try {
+		const citas = await Cita.find({ doctorId: _id, estado: "pendiente" }).sort({ fecha: 1 });
+		// console.log(citas);
+
+		res.json(citas);
+	} catch (error) {
+		console.log("Error al obtener citas", error);
+	}
+};
+
+const cambiarEstadoCita = async (req, res) => {
+	try {
+		const { _id, estado } = req.body;
+		const cita = await Cita.findByIdAndUpdate(_id, {
+			estado,
+		});
+
+		console.log(cita);
+		// Enviar NOTIF al Paciente sobre la cuenta
+		const paciente = await Usuario.findOne({ _id: cita.usuarioId });
+		const unseenNotif = paciente.unseenNotif;
+		unseenNotif.push({
+			type: "estado-cita-cambiado",
+			msg: `Su cita con ${cita.doctorInfo.nombre} ha sido ${estado}`,
+			onClickPath: "/paciente/perfil/ver-citas",
+		});
+		await paciente.save();
+
+		res.json({ msg: "Cita actualizada correctamente" });
+	} catch (error) {
+		const e = new Error("Error al cambiar el estado de la cita");
+		return res.status(400).json({ msg: e.message });
+	}
+};
+
+const obtenerCitasAprobadas = async (req, res) => {
+	const { _id } = req.doctor;
+
+	try {
+		const citas = await Cita.find({ doctorId: _id, estado: "aceptada" }).sort({ fecha: 1 });
+
+		const fechaHoy = new Date();
+
+		const fechaHoyFormat = fechaHoy.toISOString().split("T")[0];
+		const citasHoy = await Cita.find({
+			fecha: new Date(fechaHoyFormat),
+			estado: "aceptada",
+		}).sort({ fecha: 1 });
+
+		// Obtener el primer día de la semana
+		const primerDiaSemana = new Date(fechaHoy);
+		primerDiaSemana.setDate(fechaHoy.getDate() - fechaHoy.getDay());
+		// Obtener el último día de la semana
+		const ultimoDiaSemana = new Date(fechaHoy);
+		ultimoDiaSemana.setDate(primerDiaSemana.getDate() + 6);
+		// Filtrar las citas por la semana actual
+		const citasSemana = await Cita.find({
+			fecha: {
+				$gte: primerDiaSemana,
+				$lte: ultimoDiaSemana,
+			},
+			estado: "aceptada",
+		}).sort({ fecha: 1 });
+
+		// Obtener el primer día del mes
+		const primerDiaMes = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth(), 1);
+
+		// Obtener el último día del mes
+		const ultimoDiaMes = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0);
+
+		// Filtrar las citas por el mes actual
+		const citasMes = await Cita.find({
+			fecha: {
+				$gte: primerDiaMes,
+				$lte: ultimoDiaMes,
+			},
+			estado: "aceptada",
+		}).sort({ fecha: 1 });
+
+		res.json({ citas, citasHoy, citasSemana, citasMes });
+	} catch (error) {
+		console.log("Error al obtener citas", error);
+	}
+};
+
+const cambiarEstadoCitaAprobadas = async (req, res) => {
+	try {
+		const { _id, estado } = req.body;
+		const cita = await Cita.findByIdAndUpdate(_id, {
+			estado,
+		});
+
+		const historial = new HistorialCita({
+			citaId: _id,
+			usuarioId: cita.usuarioId,
+			doctorId: cita.doctorId,
+			usuarioInfo: cita.usuarioInfo,
+			doctorInfo: cita.doctorInfo,
+			fecha: cita.fecha,
+			hora: cita.hora,
+			motivo: cita.motivo,
+			estado,
+		});
+		await historial.save();
+
+		// Enviar NOTIF al Paciente sobre la cuenta
+		const paciente = await Usuario.findOne({ _id: cita.usuarioId });
+		const unseenNotif = paciente.unseenNotif;
+		unseenNotif.push({
+			type: "estado-cita-aprobada-cambiado",
+			msg: `Su cita con ${cita.doctorInfo.nombre} ha sido ${estado}`,
+			onClickPath: "/paciente/perfil/historial-citas",
+		});
+		await paciente.save();
+
+		res.json({ msg: "Cita actualizada correctamente" });
+	} catch (error) {
+		const e = new Error("Error al cambiar el estado de la cita");
+		return res.status(400).json({ msg: e.message });
+	}
+};
+
+const obtenerCitasTerminadas = async (req, res) => {
+	const { _id } = req.doctor;
+
+	try {
+		const citas = await HistorialCita.find({ doctorId: _id }).sort({ fecha: 1 });
+		// console.log(citas);
+
+		res.json(citas);
+	} catch (error) {
+		console.log("Error al obtener citas", error);
+	}
+};
+
+export {
+	registrar,
+	perfil,
+	login,
+	marcarLeidos,
+	eliminarNotificaciones,
+	actualizarPerfil,
+	obtenerCitasSolicitud,
+	cambiarEstadoCita,
+	obtenerCitasAprobadas,
+	cambiarEstadoCitaAprobadas,
+	obtenerCitasTerminadas,
+};

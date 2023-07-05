@@ -40,6 +40,9 @@ const ListaPacientes = () => {
 						<tr>
 							<th className='columna'>#</th>
 							<th className='columna'>Nombre</th>
+							<th className='columna'>Género</th>
+							<th className='columna'>Telefono</th>
+
 							<th className='columna'>Email</th>
 							<th className='columna'>Creado</th>
 							<th className='columna'>Acción</th>
@@ -47,15 +50,23 @@ const ListaPacientes = () => {
 					</thead>
 
 					<tbody className='tabla-body'>
-						{pacientes.map((paciente, i) => (
-							<tr key={paciente._id}>
-								<td className='tabla-celda'>{i + 1}</td>
-								<td className='tabla-celda'>{paciente.nombre}</td>
-								<td className='tabla-celda'>{paciente.email}</td>
-								<td className='tabla-celda'>{paciente.createdAt}</td>
-								<td className='tabla-celda enlace-tabla'>Bloquear</td>
-							</tr>
-						))}
+						{pacientes.map((paciente, i) => {
+							const fechaFormateada = new Date(paciente.createdAt).toLocaleDateString();
+
+							return (
+								<tr key={paciente._id}>
+									<td className='tabla-celda'>{i + 1}</td>
+									<td className='tabla-celda'>{paciente.nombre}</td>
+									<td className='tabla-celda capitalize'>{paciente.genero}</td>
+									<td className='tabla-celda'>{paciente.telefono}</td>
+									<td className='tabla-celda'>{paciente.email}</td>
+									<td className='tabla-celda'>{fechaFormateada}</td>
+									<td className='tabla-celda enlace-tabla '>
+										<span className='btn-red'>Bloquear</span>
+									</td>
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>

@@ -1,11 +1,11 @@
 //crear controladores para las diferentes rutas
-
 import generarJWT from "../helpers/generarJWT.js";
 
 import bcrypt from "bcrypt";
 import Admin from "../models/Admin.js";
 import Usuario from "../models/Usuario.js";
 import Doctor from "../models/Doctor.js";
+import HistorialCita from "../models/HistorialCita.js";
 
 const registrar = async (req, res) => {
 	// res.send("Desde API Veterinarios CONTROLLER"); para enviar algo a la web
@@ -117,7 +117,7 @@ const eliminarNotificaciones = async (req, res) => {
 
 		const actualizarAdmin = await admin.save();
 
-		res.json({ msg: "Notificaciones marcadas como leída correctamente" });
+		res.json({ msg: "Notificaciones eliminadas correctamente" });
 
 		// console.log(admin, "ADMIN");
 	} catch (e) {
@@ -184,6 +184,18 @@ const cambiarEstadoDoctor = async (req, res) => {
 	}
 };
 
+const obtenerCitasTerminadas = async (req, res) => {
+	// const { _id } = req.doctor;
+
+	try {
+		const citas = await HistorialCita.find().sort({ fecha: 1 });
+
+		res.json(citas);
+	} catch (error) {
+		console.log("Error al obtener citas", error);
+	}
+};
+
 export {
 	registrar,
 	perfil,
@@ -193,40 +205,5 @@ export {
 	obtenerPacientes,
 	obtenerDoctores,
 	cambiarEstadoDoctor,
+	obtenerCitasTerminadas,
 };
-
-// router.get("/get-all-users", authMiddleware, async (req, res) => {
-// 	try {
-// 	  const users = await User.find({});
-// 	  res.status(200).send({
-// 		message: "Users fetched successfully",
-// 		success: true,
-// 		data: users,
-// 	  });
-// 	} catch (error) {
-// 	  console.log(error);
-// 	  res.status(500).send({
-// 		message: "Error applying doctor account",
-// 		success: false,
-// 		error,
-// 	  });
-// 	}
-//   });
-
-// router.get("/get-all-doctors", authMiddleware, async (req, res) => {
-// 	try {
-// 	  const doctors = await Doctor.find({});
-// 	  res.status(200).send({
-// 		message: "Doctors fetched successfully",
-// 		success: true,
-// 		data: doctors,
-// 	  });
-// 	} catch (error) {
-// 	  console.log(error);
-// 	  res.status(500).send({
-// 		message: "Error applying doctor account",
-// 		success: false,
-// 		error,
-// 	  });
-// 	}
-//   });

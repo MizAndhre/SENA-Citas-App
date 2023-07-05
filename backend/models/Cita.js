@@ -2,14 +2,21 @@ import mongoose from "mongoose";
 
 const citaSchema = new mongoose.Schema(
 	{
-		usuario: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Usario",
+		usuarioId: {
+			type: String,
 			required: true,
 		},
-		doctor: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Doctor",
+		doctorId: {
+			type: String,
+			required: true,
+		},
+		usuarioInfo: {
+			type: Object,
+			required: true,
+		},
+		doctorInfo: {
+			type: Object,
+
 			required: true,
 		},
 		fecha: {
@@ -17,7 +24,7 @@ const citaSchema = new mongoose.Schema(
 			required: true,
 		},
 		hora: {
-			type: String,
+			type: Date,
 			required: true,
 		},
 		motivo: {

@@ -19,10 +19,10 @@ const RutaProtegidaDr = () => {
 				<div className='flex h-screen'>
 					<Sidebar />
 
-					<div className='flex flex-col w-full'>
+					<div className='main-container'>
 						<Header />
 
-						<main className='border-2 border-teal-800 rounded-md shadow-md mx-5 mb-5 flex-grow p-5'>
+						<main className='main'>
 							<Outlet />
 						</main>
 					</div>

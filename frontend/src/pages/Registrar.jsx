@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import useAlerta from "../hooks/useAlerta";
 import clienteAxios from "../config/axios";
 
+import imagen from "../assets/undraw_web_search_re_efla.svg";
+
 const Registrar = () => {
 	const [nombre, setNombre] = useState("");
 	const [email, setEmail] = useState("");
@@ -49,15 +51,14 @@ const Registrar = () => {
 
 	return (
 		<>
-
-			
-
-
 			{/* Titulo de La Pagina */}
 			<div>
 				<h1 className='titulo-auth'>
 					Crea una Cuenta y Aparta <span>tus Citas</span>
 				</h1>
+				<div className='div-img'>
+					<img src={imagen} alt='Ilustración doctor' />
+				</div>
 			</div>
 
 			{/* Formulario */}
@@ -66,6 +67,7 @@ const Registrar = () => {
 
 				<form onSubmit={handleSubmit}>
 					<div className='my-5'>
+						<p className='label-form-sub-ast'></p>
 						<label className='label-form' htmlFor='nombre'>
 							Nombre
 						</label>
@@ -135,9 +137,3 @@ const Registrar = () => {
 };
 
 export default Registrar;
-
-{
-	/* <Link to='/olvide-password' className='enlace'>
-						Olvidé mi contraseña
-					</Link> */
-}

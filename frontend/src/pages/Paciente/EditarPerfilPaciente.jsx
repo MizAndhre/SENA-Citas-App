@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import useAlerta from "../../hooks/useAlerta";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
-const EditarPerfilDoctor = () => {
+const EditarPerfilPaciente = () => {
 	const { auth, actualizarPerfil, autenticarUsuario } = useAuth();
 	const [perfil, setPerfil] = useState({});
 	const navigate = useNavigate();
-	const { alertaExito, alertaError } = useAlerta();
+	const { alertaError } = useAlerta();
 
 	useEffect(() => {
 		setPerfil(auth);
@@ -16,17 +16,15 @@ const EditarPerfilDoctor = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		console.log(perfil);
 
-		const { nombre, email, especialidad, horaFinal, horaInicio } = perfil;
-		if ([nombre, email, especialidad, horaFinal, horaInicio].includes("")) {
+		const { nombre, email } = perfil;
+		if ([nombre, email].includes("")) {
 			toast.custom(alertaError("Todos los campos son obligatorios"));
 			return;
 		}
 
 		const resultado = await actualizarPerfil(perfil);
-		toast.custom(alertaExito("Perfil Actualizado"));
-		navigate("/doctor/perfil");
-		autenticarUsuario();
 	};
 
 	return (
@@ -77,16 +75,35 @@ const EditarPerfilDoctor = () => {
 						</div>
 
 						<div className='my-5'>
-							<label className='label-form' htmlFor='especialidad'>
-								Especialidad
+							<label htmlFor='genero' className='label-form-no'>
+								Genero
 							</label>
-							<input
-								id='especialidad'
-								name='especialidad'
-								type='text'
-								placeholder='Escribe tu especialidad'
+							<select
+								id='genero'
+								name='genero'
 								className='input-form'
-								value={perfil.especialidad || ""}
+								value={perfil.genero || ""}
+								onChange={(e) =>
+									setPerfil({
+										...perfil,
+										[e.target.name]: e.target.value,
+									})
+								}>
+								<option value=''>--Género--</option>
+								<option value='femenino'>Femenino</option>
+								<option value='masculino'>Masculino</option>
+								<option value='no binario'>No binario</option>
+								<option value='otro'>Otro</option>
+							</select>
+						</div>
+
+						<div className='my-5'>
+							<label className='label-form-no'>Teléfono</label>
+							<input
+								type='text'
+								name='telefono'
+								className='input-form'
+								value={perfil.telefono || ""}
 								onChange={(e) =>
 									setPerfil({
 										...perfil,
@@ -94,51 +111,6 @@ const EditarPerfilDoctor = () => {
 									})
 								}
 							/>
-						</div>
-
-						<div className='my-5 '>
-							<h3 className='label-disponibilidad'>Disponibilidad</h3>
-							<div className='grid grid-cols-2 gap-4'>
-								<div>
-									<label className='label-form-sub' htmlFor='horaInicio'>
-										Hora Inicio
-									</label>
-									<input
-										id='horaInicio'
-										name='horaInicio'
-										type='time'
-										placeholder='Escribe tus horas disponibles'
-										className='input-form'
-										value={perfil.horaInicio || ""}
-										onChange={(e) =>
-											setPerfil({
-												...perfil,
-												[e.target.name]: e.target.value,
-											})
-										}
-									/>
-								</div>
-								<div>
-									<label className='label-form-sub' htmlFor='horaFinal'>
-										Hora Final
-									</label>
-
-									<input
-										id='horaFinal'
-										name='horaFinal'
-										type='time'
-										placeholder='Escribe tus horas disponibles'
-										className='input-form'
-										value={perfil.horaFinal || ""}
-										onChange={(e) =>
-											setPerfil({
-												...perfil,
-												[e.target.name]: e.target.value,
-											})
-										}
-									/>
-								</div>
-							</div>
 						</div>
 
 						<input type='submit' value='Guardar Cambios' className='btn' />
@@ -149,4 +121,4 @@ const EditarPerfilDoctor = () => {
 	);
 };
 
-export default EditarPerfilDoctor;
+export default EditarPerfilPaciente;

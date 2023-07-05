@@ -5,7 +5,13 @@ import {
 	login,
 	perfil,
 	marcarLeidos,
-	eliminarNotificaciones,actualizarPerfil
+	eliminarNotificaciones,
+	actualizarPerfil,
+	obtenerCitasSolicitud,
+	cambiarEstadoCita,
+	obtenerCitasAprobadas,
+	cambiarEstadoCitaAprobadas,
+	obtenerCitasTerminadas,
 } from "../controllers/doctorController.js";
 import checkAuth from "../middleware/authMiddleware.js";
 
@@ -22,5 +28,14 @@ router.post("/marcar-leidos", checkAuth, marcarLeidos);
 router.post("/eliminar-notificaciones", checkAuth, eliminarNotificaciones);
 
 router.put("/perfil/:id", checkAuth, actualizarPerfil);
+
+router.get("/obtener-citas-solicitadas/", checkAuth, obtenerCitasSolicitud);
+router.post("/cambiar-estado-citas", checkAuth, cambiarEstadoCita);
+router.get("/obtener-citas-aprobadas/", checkAuth, obtenerCitasAprobadas);
+router.post("/cambiar-estado-citas-aprobadas", checkAuth, cambiarEstadoCitaAprobadas);
+
+router.get("/obtener-citas-aprobadas-semana/", checkAuth, obtenerCitasAprobadas);
+
+router.get("/obtener-citas-terminadas/", checkAuth, obtenerCitasTerminadas);
 
 export default router;

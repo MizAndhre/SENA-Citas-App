@@ -1,22 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import clienteAxios from "../../config/axios";
+import useAuth from "../../hooks/useAuth";
+import useAlerta from "../../hooks/useAlerta";
 import toast from "react-hot-toast";
 
-import useAlerta from "../../hooks/useAlerta";
-import clienteAxios from "../../config/axios";
-
-import useAuth from "../../hooks/useAuth";
+import svgDoctor from "../../assets/undraw_medicine_b-1-ol.svg";
 
 const LoginDoctor = () => {
+	const navigate = useNavigate();
+	const { alertaError, alertaExito } = useAlerta();
+	const { setAuth } = useAuth();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-
-	const { alertaError, alertaExito } = useAlerta();
-
-	const navigate = useNavigate();
-
-	const { setAuth } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -32,7 +30,6 @@ const LoginDoctor = () => {
 			const url = "/doctores/login";
 			const { data } = await clienteAxios.post(url, { email, password });
 
-			console.log(data);
 			//guardar al usuario en local storage para mantener la sesion
 			localStorage.setItem("token", data.token);
 			localStorage.setItem("role", data.role);
@@ -54,11 +51,14 @@ const LoginDoctor = () => {
 					{" "}
 					Inicia Sesión y Administra <span>tus Citas y Pacientes</span>
 				</h1>
+
+				<div className='div-img'>
+					<img src={svgDoctor} alt='Ilustración doctor' />
+				</div>
 			</div>
 
 			<div className='div-formulario'>
-				{/* Lugar de la Alera => Exito o Error */}
-
+				<p className='label-form-sub-ast'></p>
 				<form onSubmit={handleSubmit}>
 					<div className='my-5'>
 						<label className='label-form' htmlFor='email'>

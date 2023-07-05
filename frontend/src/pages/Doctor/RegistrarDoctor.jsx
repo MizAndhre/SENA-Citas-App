@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import useAlerta from "../../hooks/useAlerta";
 import clienteAxios from "../../config/axios";
 
+import svgDoctor from "../../assets/undraw_medical_research_qg4d.svg";
+
 const RegistrarDoctor = () => {
 	const [nombre, setNombre] = useState("");
 	const [email, setEmail] = useState("");
@@ -69,13 +71,15 @@ const RegistrarDoctor = () => {
 					{" "}
 					Crea una cuenta y Administra <span>tus Citas y Pacientes</span>
 				</h1>
+				<div className='div-img'>
+					<img src={svgDoctor} alt='Ilustración doctor' />
+				</div>
 			</div>
 
 			{/* Formulario */}
 			<div className='div-formulario-doctor'>
-				{/* Lugar de la Alerta => Exito o Error */}
-
 				<form onSubmit={handleSubmit}>
+					<p className='label-form-sub-ast'></p>
 					<div className='my-5'>
 						<label className='label-form' htmlFor='nombre'>
 							Nombre
@@ -127,7 +131,6 @@ const RegistrarDoctor = () => {
 								<input
 									id='horaInicio'
 									type='time'
-									placeholder='Escribe tus horas disponibles'
 									className='input-form'
 									value={horaInicio}
 									onChange={(e) => setHoraInicio(e.target.value)}
@@ -141,7 +144,6 @@ const RegistrarDoctor = () => {
 								<input
 									id='horaFinal'
 									type='time'
-									placeholder='Escribe tus horas disponibles'
 									className='input-form'
 									value={horaFinal}
 									onChange={(e) => setHoraFinal(e.target.value)}

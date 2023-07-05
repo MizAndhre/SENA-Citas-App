@@ -7,6 +7,8 @@ import useAlerta from "../hooks/useAlerta";
 import clienteAxios from "../config/axios";
 import useAuth from "../hooks/useAuth";
 
+import imagen from "../assets/undraw_online_calendar_re_wk3t.svg";
+
 const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -51,13 +53,15 @@ const Login = () => {
 				<h1 className='titulo-auth'>
 					Inicia Sesión y Programa <span>tus Citas</span>
 				</h1>
+				<div className='div-img'>
+					<img src={imagen} alt='Ilustración doctor' />
+				</div>
 			</div>
 
 			<div className='div-formulario'>
-				{/* Lugar de la Alera => Exito o Error */}
-
 				<form onSubmit={handleSubmit}>
 					<div className='my-5'>
+						<p className='label-form-sub-ast'></p>
 						<label className='label-form' htmlFor='email'>
 							Correo Electrónico
 						</label>

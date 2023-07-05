@@ -23,7 +23,6 @@ const ListaDoctores = () => {
 			// console.log(data);
 			setDoctores(data);
 			autenticarUsuario();
-			// toast.custom(alertaExito(data.msg));
 		} catch (error) {
 			console.log(error.response.data.msg);
 		}
@@ -32,7 +31,8 @@ const ListaDoctores = () => {
 	useEffect(() => {
 		obtenerDoctores();
 	}, []);
-	console.log(doctores);
+	// console.log(doctores);
+
 	const cambiarEstadoDoctor = async (doctorId, estado) => {
 		console.log(doctorId, estado);
 
@@ -74,27 +74,60 @@ const ListaDoctores = () => {
 					</thead>
 
 					<tbody className='tabla-body'>
-						{doctores.map((doctor, i) => (
-							<tr key={doctor._id}>
-								<td className='tabla-celda'>{i + 1}</td>
-								<td className='tabla-celda'>{doctor.nombre}</td>
-								<td className='tabla-celda'>{doctor.email}</td>
-								<td className='tabla-celda'>{doctor.createdAt}</td>
-								<td className='tabla-celda capitalize'>{doctor.estado}</td>
-								<td className='tabla-celda enlace-tabla'>
-									{doctor.estado === "pendiente" && (
-										<p onClick={() => cambiarEstadoDoctor(doctor._id, "aprobada")}>
-											Aprobar
-										</p>
-									)}
-									{doctor.estado === "aprobada" && (
-										<p onClick={() => cambiarEstadoDoctor(doctor._id, "bloqueada")}>
-											Bloquear
-										</p>
-									)}
-								</td>
-							</tr>
-						))}
+						{doctores.map((doctor, i) => {
+							const fechaFormateada = new Date(doctor.createdAt).toLocaleDateString();
+
+							return (
+								<tr key={doctor._id}>
+									<td className='tabla-celda'>{i + 1}</td>
+									<td className='tabla-celda'>{doctor.nombre}</td>
+									<td className='tabla-celda'>{doctor.email}</td>
+									<td className='tabla-celda'>{fechaFormateada}</td>
+									<td className='tabla-celda capitalize'>
+										<span
+											className={`
+											${
+												doctor.estado === "aprobada"
+													? "pill-green"
+													: doctor.estado === "pendiente"
+													? "pill-yellow"
+													: "pill-red"
+											}`}>
+											{doctor.estado}
+										</span>
+									</td>
+									<td className='tabla-celda '>
+										{doctor.estado === "pendiente" && (
+											<p
+												className=' enlace-tabla btn-green'
+												onClick={() => cambiarEstadoDoctor(doctor._id, "aprobada")}>
+												Aprobar
+											</p>
+										)}
+
+										{doctor.estado === "pendiente" && (
+											<p
+												className=' enlace-tabla btn-red'
+												onClick={() => cambiarEstadoDoctor(doctor._id, "rechazada")}>
+												Rechazar
+											</p>
+										)}
+
+										{doctor.estado === "rechazada" && (
+											<p className=' enlace-tabla btn-gray'>Eliminar</p>
+										)}
+
+										{doctor.estado === "aprobada" && (
+											<p
+												className='enlace-tabla btn-gray'
+												onClick={() => cambiarEstadoDoctor(doctor._id, "bloqueada")}>
+												Bloquear
+											</p>
+										)}
+									</td>
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import clienteAxios from "../../config/axios";
-import useAlerta from "../../hooks/useAlerta";
-import useAuth from "../../hooks/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Perfil = () => {
 	const navigate = useNavigate();
@@ -56,15 +54,15 @@ const Perfil = () => {
 						<p className='div-card-atributo '>
 							Horario:{" "}
 							<span className='font-normal'>
-								{doctor.horaInicio} - {doctor.horaFinal}{" "}
+								{doctor.horaInicio} - {doctor.horaFinal}
 							</span>
 						</p>
 
 						<div
 							className='div-card-btn'
 							onClick={() => navigate(`/paciente/perfil/programar-cita/${doctor._id}`)}>
-							Programa cita
-							<i className='fa-solid fa-arrow-right-long pr-2'></i>
+							<p> Programa cita </p>
+							<i className='fa-solid fa-arrow-right-long'></i>
 						</div>
 					</div>
 				))}

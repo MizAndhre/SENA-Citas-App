@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
 
 	console.log(auth);
 
-	// ? Obtener los diferentes perfiles según el Usuario
+	// Obtener los diferentes perfiles según el Usuario
 	const obtenerPerfilPaciente = async (config) => {
 		// Lógica para obtener perfil de paciente
 		try {
@@ -32,7 +32,7 @@ const AuthProvider = ({ children }) => {
 	};
 	const obtenerPerfilDoctor = async (config) => {
 		// Lógica para obtener perfil de doctor
-		// Utiliza la API correspondiente para obtener la información del doctor
+
 		try {
 			const { data } = await clienteAxios.get("/doctores/perfil", config);
 
@@ -43,8 +43,6 @@ const AuthProvider = ({ children }) => {
 		}
 	};
 	const obtenerPerfilAdmin = async (config) => {
-		// Lógica para obtener perfil de administrador
-		// Utiliza la API correspondiente para obtener la información del administrador
 		try {
 			const { data } = await clienteAxios.get("/admins/perfil", config);
 
@@ -86,7 +84,7 @@ const AuthProvider = ({ children }) => {
 
 		setCargando(false);
 	};
-	// ? Mandar a llamar autenticacion del Usuario cuando la pagina cargue una vez
+	// Mandar a llamar autenticacion del Usuario cuando la pagina cargue una vez
 	useEffect(() => {
 		autenticarUsuario();
 	}, []);
@@ -98,8 +96,7 @@ const AuthProvider = ({ children }) => {
 		setAuth({});
 	};
 
-	// ? Obtener las Notificaciones según el usuario
-	// ! Falta Terminar
+	// Obtener las Notificaciones según el usuario
 	const obtenerNotifPaciente = async (config) => {
 		try {
 			const url = "/usuarios/marcar-leidos";
@@ -165,9 +162,19 @@ const AuthProvider = ({ children }) => {
 		autenticarUsuario();
 	};
 
-	// ? Eliminar las Notificaciones según el usuario
-	// ! Falta Terminar
-	const eliminarNotifPaciente = () => {};
+	//  Eliminar las Notificaciones según el usuario
+	const eliminarNotifPaciente = async (config) => {
+		try {
+			const url = "/usuarios/eliminar-notificaciones";
+			console.log(auth._id);
+			const { data } = await clienteAxios.post(url, { _id: auth._id }, config);
+
+			console.log(data);
+			toast.custom(alertaExito(data.msg));
+		} catch (error) {
+			toast.custom(alertaError(error.response.data.msg));
+		}
+	};
 	const eliminarNotifDoctor = async (config) => {
 		try {
 			const url = "/doctores/eliminar-notificaciones";
@@ -221,22 +228,35 @@ const AuthProvider = ({ children }) => {
 		autenticarUsuario();
 	};
 
-	// ? Actualizar el perfil según el usuario
-	// ! Falta Terminar
-	const actualizarPerfilPaciente = async (config, datos) => {};
-	const actualizarPerfilAdmin = async (config, datos) => {};
+	//  Actualizar el perfil según el usuario
+	const actualizarPerfilPaciente = async (config, datos) => {
+		try {
+			const url = `/usuarios/perfil/${datos._id}`;
+			const { data } = await clienteAxios.put(url, datos, config);
+
+			toast.custom(alertaExito("Perfil Actualizado"));
+		} catch (error) {
+			toast.custom(alertaError(error.response.data.msg));
+		}
+	};
+	const actualizarPerfilAdmin = async (config, datos) => {
+		try {
+			const url = `/admins/perfil/${datos._id}`;
+			const { data } = await clienteAxios.put(url, datos, config);
+
+			toast.custom(alertaExito("Perfil Actualizado"));
+		} catch (error) {
+			toast.custom(alertaError(error.response.data.msg));
+		}
+	};
 	const actualizarPerfilDoctor = async (config, datos) => {
 		try {
 			const url = `/doctores/perfil/${datos._id}`;
 			const { data } = await clienteAxios.put(url, datos, config);
-			console.log(data);
 
-			toast.custom(alertaExito("Actualizado Correctamente"));
+			toast.custom(alertaExito("Perfil Actualizado"));
 		} catch (error) {
-			return {
-				msg: error.response.data.msg,
-				error: true,
-			};
+			toast.custom(alertaError(error.response.data.msg));
 		}
 	};
 	// ? Autenticar y verificar el usuario para actualizarlo
@@ -269,38 +289,6 @@ const AuthProvider = ({ children }) => {
 			setAuth({});
 		}
 	};
-
-	// ? Autenticar y verificar el usuario para realizar cambio de contraseña
-	// const guardarPassword = async (datos) => {
-	// 	const token = localStorage.getItem("token");
-
-	// 	if (!token) {
-	// 		setCargando(false);
-	// 		return;
-	// 	}
-
-	// 	const config = {
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 			Authorization: `Bearer ${token}`,
-	// 		},
-	// 	};
-
-	// 	try {
-	// 		const url = `/veterinarios/actualizar-password`;
-	// 		const { data } = await clienteAxios.put(url, datos, config);
-	// 		console.log(data);
-	// 		return {
-	// 			msg: data.msg,
-	// 			error: false,
-	// 		};
-	// 	} catch (error) {
-	// 		return {
-	// 			msg: error.response.data.msg,
-	// 			error: true,
-	// 		};
-	// 	}
-	// };
 
 	return (
 		<AuthContext.Provider
